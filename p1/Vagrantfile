@@ -1,0 +1,31 @@
+Vagrant.configure(2) do |config|
+    config.vm.box = "debian/bullseye64"
+    config.vm.box_version = "11.20240905.1"
+        # config.vm.box_url = REDACTED
+    config.vm.define "sbarrageS" do |control|
+        control.vm.hostname = "sbarrageS"
+        control.vm.network "private_network", ip: "192.168.56.110"
+        control.vm.provider "virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--name", "sbarrageS"]
+            
+        end
+        control.vm.provision "shell", inline: <<-SHELL
+            apt-get update
+            apt-get install -y curl
+            # curl -sfL https://get.k3s.io | sh - 
+        SHELL
+    end
+
+    config.vm.define "sbarrageSW" do |control|
+        control.vm.hostname = "sbarrageSW"
+        control.vm.network "private_network", ip: "192.168.56.111"
+        control.vm.provider "virtualbox" do |v|
+            v.customize ["modifyvm", :id, "--name", "sbarrageSW"]
+        end
+        control.vm.provision "shell", inline: <<-SHELL
+            apt-get update
+            apt-get install -y curl
+            # curl -sfL https://get.k3s.io | sh - 
+        SHELL
+    end
+end

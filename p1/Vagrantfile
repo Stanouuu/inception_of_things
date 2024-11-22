@@ -10,11 +10,10 @@ Vagrant.configure(2) do |config|
             v.memory = 1024
             v.cpus = 1
         end
-        control.vm.provision "file", source: "./kubernates.config/controller.yaml", destination: "/tmp/config.yaml"
-        control.vm.provision "file", source: "./shell.conf/controller.sh", destination: "/tmp/entrypoint.sh"
-        control.vm.provision "shell", inline: <<-SHELL
-            bash shell.conf/entrypoint.sh
-        SHELL
+        control.vm.provision "file", source: "./kubernates.conf/controller.yaml", destination: "/tmp/config.yaml"
+        # control.vm.provision "file", source: "./shell.conf/controller.sh", destination: "/tmp/entrypoint.sh"
+        control.vm.provision "shell", path: "./shell.conf/controller.sh"
+
     end
 
     config.vm.define "sbarrageSW" do |control|
@@ -25,10 +24,8 @@ Vagrant.configure(2) do |config|
             v.memory = 1024
             v.cpus = 1
         end
-        control.vm.provision "file", source: "./kubernates.config/agent.yaml", destination: "/tmp/config.yaml"
-        control.vm.provision "file", source: "./shell.conf/agent.sh", destination: "/tmp/entrypoint.sh"
-        control.vm.provision "shell", inline: <<-SHELL
-            bash shell.conf/entrypoint.sh
-        SHELL
+        control.vm.provision "file", source: "./kubernates.conf/agent.yaml", destination: "/tmp/config.yaml"
+        # control.vm.provision "file", source: "./shell.conf/agent.sh", destination: "/tmp/entrypoint.sh"
+        control.vm.provision "shell", path: "./shell.conf/agent.sh"
     end
 end

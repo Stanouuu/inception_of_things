@@ -7,12 +7,13 @@ Vagrant.configure(2) do |config|
         control.vm.network "private_network", ip: "192.168.56.110"
         control.vm.provider "virtualbox" do |v|
             v.customize ["modifyvm", :id, "--name", "sbarrageS"]
-            
+            v.memory = 1024
+            v.cpus = 1
         end
+        control.vm.provision "file", source: "./kubernates.config/controller.yaml", destination: "/tmp/config.yaml"
+        control.vm.provision "file", source: "./shell.conf/controller.sh", destination: "/tmp/entrypoint.sh"
         control.vm.provision "shell", inline: <<-SHELL
-            apt-get update
-            apt-get install -y curl
-            # curl -sfL https://get.k3s.io | sh - 
+            bash shell.conf/entrypoint.sh
         SHELL
     end
 
@@ -21,11 +22,13 @@ Vagrant.configure(2) do |config|
         control.vm.network "private_network", ip: "192.168.56.111"
         control.vm.provider "virtualbox" do |v|
             v.customize ["modifyvm", :id, "--name", "sbarrageSW"]
+            v.memory = 1024
+            v.cpus = 1
         end
+        control.vm.provision "file", source: "./kubernates.config/agent.yaml", destination: "/tmp/config.yaml"
+        control.vm.provision "file", source: "./shell.conf/agent.sh", destination: "/tmp/entrypoint.sh"
         control.vm.provision "shell", inline: <<-SHELL
-            apt-get update
-            apt-get install -y curl
-            # curl -sfL https://get.k3s.io | sh - 
+            bash shell.conf/entrypoint.sh
         SHELL
     end
 end
